@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SNN IG Report — Combined (2 pages)</title>
+  <style>
+    :root{
+      --fg:#1f2328; --sub:#5b5f66; --muted:#8a8f98;
+      --bg:#f6f7f9; --card:#ffffff; --line:#e6e9ef; --chip:#eef2f7;
+      --accent:#0b5fff;
+    }
+    html,body{margin:0;padding:0;background:var(--bg); color:var(--fg);}
+    body{
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Noto Sans", sans-serif;
+      line-height:1.6; font-size:16px;
+    }
+    .page{
+      max-width: 780px;
+      margin: 56px auto;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius:14px;
+      box-shadow: 0 6px 20px rgba(19,31,55,.06);
+      padding: 40px 44px;
+    }
+    h1{margin:0 0 8px 0; font-size:28px; font-weight:800; letter-spacing:-.2px;}
+    h2{font-size:20px; margin:26px 0 10px 0; border-bottom:1px solid var(--line); padding-bottom:6px;}
+    p{margin:8px 0;}
+    strong{font-weight:700;}
+    .meta{color:var(--muted); font-size:14px;}
+    .meta a{color:var(--accent); text-decoration:none;}
+    .chips{display:flex; gap:8px; flex-wrap:wrap; margin-top:8px}
+    .chip{background:var(--chip); border:1px solid var(--line); color:#3a3f45;
+          padding:4px 10px; border-radius:999px; font-size:12px;}
+    table{width:100%; border-collapse:collapse; margin:10px 0 4px 0;}
+    th,td{border:1px solid var(--line); padding:10px 12px; vertical-align:top;}
+    th{background:#f2f4f8; text-align:left; font-weight:700;}
+    tbody tr:nth-child(odd){background:#fafbfe;}
+    .fig2{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:10px;}
+    .fig2 figure{margin:0;}
+    .fig2 img{width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:10px;}
+    .cap{color:var(--sub); font-size:12.5px; margin-top:6px}
+    pre, code, kbd {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Cascadia Code",
+                   Consolas, "Liberation Mono", monospace;
+    }
+    pre{
+      background:#f1f3f7; border:1px solid var(--line);
+      border-radius:10px; padding:12px 14px; overflow:auto;
+      font-size: 13.5px; line-height:1.5; margin:12px 0;
+    }
+    footer{margin-top:22px; color:var(--muted); font-size:12.5px}
+    .page-num{margin-top:8px; text-align:right; color:var(--muted); font-size:12.5px}
+    /* print */
+    @media print{
+      body{background:#fff;}
+      .page{box-shadow:none; border:0; margin:0; border-radius:0; padding:18mm;}
+      .break-after{page-break-after: always;}
+      a[href]:after{content:"";}
+    }
+  </style>
+</head>
+<body>
+  <!-- PAGE 1 -->
+  <main class="page break-after">
+    <header>
+      <h1>Threshold Gating in a 5‑Neuron LIF SNN — 1‑page of 2</h1>
+      <div class="meta">
+        Author: GNJz · <a href="mailto:jazzin@qig.ai">jazzin@qig.ai</a><br/>
+        2025‑09‑02 · Code: <code>QIG/code/lif_network.py</code> (commit fc6ceee)
+      </div>
+    </header>
+
+    <section>
+      <h2>Abstract</h2>
+      <p>
+        We test whether a simple <em>threshold gating</em> (IG: inhibitory gating implemented as a lower firing threshold) 
+        increases collective responsiveness in a small spiking neural network. In a 5‑neuron LIF network receiving 
+        the same pulse input (0.1–0.7 s), total spikes were <strong>0 for baseline (α = 1.0)</strong> and 
+        <strong>86 for IG‑on (α = 0.7)</strong>, indicating a qualitative transition from no activity to broad network firing 
+        under identical input.
+      </p>
+      <div class="chips">
+        <span class="chip">SNN</span><span class="chip">LIF</span><span class="chip">Threshold gating</span><span class="chip">Collective response</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Methods (Brief)</h2>
+      <table>
+        <thead><tr><th>Item</th><th>Setting</th></tr></thead>
+        <tbody>
+          <tr><td>Model</td><td>LIF (Leaky Integrate‑and‑Fire) with reset</td></tr>
+          <tr><td>Simulation</td><td>T = 1 s, dt = 1 ms (1000 steps)</td></tr>
+          <tr><td>Parameters</td><td>τ = 20 ms, V<sub>rest</sub> = 0, R = 40, θ<sub>base</sub> = 1.0, V<sub>reset</sub> = 0.2</td></tr>
+          <tr><td>Neurons</td><td>N = 5</td></tr>
+          <tr><td>Input</td><td>Pulse to all neurons from 0.1–0.7 s (per‑neuron noise σ = 0.05)</td></tr>
+          <tr><td>Recurrent W</td><td>U(0, 0.25) off‑diagonal; add 3 random inhibitory links −0.15</td></tr>
+          <tr><td>Gating (IG)</td><td>θ = α·θ<sub>base</sub>; baseline α = 1.0, IG‑on α = 0.7</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Results</h2>
+      <table>
+        <thead><tr><th>Condition</th><th>Total spikes (1 s)</th></tr></thead>
+        <tbody>
+          <tr><td>Baseline (α = 1.0)</td><td>0</td></tr>
+          <tr><td>IG‑on (α = 0.7)</td><td>86</td></tr>
+        </tbody>
+      </table>
+      <div class="fig2">
+        <figure>
+          <img src="./figs/raster_baseline.png" alt="Raster — Baseline (α=1.0)">
+          <div class="cap">Fig. 1. Raster — Baseline (α = 1.0): input present but thresholds not reached.</div>
+        </figure>
+        <figure>
+          <img src="./figs/raster_ig.png" alt="Raster — IG‑on (α=0.7)">
+          <div class="cap">Fig. 2. Raster — IG‑on (α = 0.7): widespread spiking emerges under identical input.</div>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <h2>Interpretation</h2>
+      <p>
+        A <strong>30% reduction in threshold</strong> drives a regime shift from “no firing” to “collective firing”. 
+        We interpret this as (i) single‑neuron threshold approach combined with (ii) recurrent excitatory positive feedback, 
+        yielding a <em>collective threshold phenomenon</em>.
+      </p>
+    </section>
+
+    <footer>
+      Screen view is a “card”. For PDF: browser <em>File → Print → Save as PDF</em>; scale 95–98% fits two A4 pages.
+      <div class="page-num">Page 1 / 2</div>
+    </footer>
+  </main>
+
+  <!-- PAGE 2 -->
+  <main class="page">
+    <header>
+      <h1>Threshold Gating in a 5‑Neuron LIF SNN — Summary & Next Steps (p.2)</h1>
+      <div class="meta">
+        Author: GNJz · <a href="mailto:jazzin@qig.ai">jazzin@qig.ai</a> · 2025‑09‑02<br/>
+        Code: <code>QIG/code/lif_network.py</code> (commit fc6ceee)
+      </div>
+    </header>
+
+    <section>
+      <h2>Five‑line Summary</h2>
+      <ul>
+        <li>With identical input (0.1–0.7 s), lowering threshold (α = 0.7) yields a regime shift to <strong>collective spiking</strong>.</li>
+        <li>Total spikes: baseline 0 vs. IG‑on 86 (N=5, T=1 s, dt=1 ms).</li>
+        <li>Mechanism: (i) approach to threshold + (ii) recurrent positive feedback.</li>
+        <li>Minimal gating yields large changes in sensitivity/synchrony → potential task gains.</li>
+        <li>Current result is a minimal reproduction; statistical validation and sweeps required.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Reproduction (local)</h2>
+      <pre><code>cd ~/Desktop/Qquarts_Lab/QIG/code
+python3 lif_network.py   # generates figs/raster_baseline.png and figs/raster_ig.png</code></pre>
+    </section>
+
+    <section>
+      <h2>Risks & Checklist</h2>
+      <ul>
+        <li>Single seed, small N=5 → parameter/seed sensitivity (need multiple seeds).</li>
+        <li>Baseline = 0 spikes → avoid ratios; use absolute differences, response/no‑response, latency, firing‑neuron ratio.</li>
+        <li>Simple input/connectivity → task generalization to be checked separately.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Next Steps (toward a paper)</h2>
+      <ul>
+        <li><strong>Reproducibility:</strong> 30 seeds, 95% CI.</li>
+        <li><strong>Sweeps:</strong> α ∈ {0.5…1.0}, N ∈ {5, 20, 50}, input strength/length.</li>
+        <li><strong>Metrics:</strong> total spikes, latency, firing‑neuron ratio, synchrony/Fano.</li>
+        <li><strong>Ablation:</strong> cut recurrence (W=0), manipulate inhibition, modify input window.</li>
+        <li><strong>Task:</strong> simple binary detection; compare IG on/off performance.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Meta</h2>
+      <table>
+        <tbody>
+          <tr><th style="width:160px">Code path</th><td>QIG/code/lif_network.py</td></tr>
+          <tr><th>Commit</th><td>fc6ceee</td></tr>
+          <tr><th>Figures</th><td>figs/raster_baseline.png, figs/raster_ig.png</td></tr>
+          <tr><th>One‑line</th><td>Baseline 0 vs. IG‑on 86 (1 s, N=5)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer>
+      Print with 95–98% scale for tight A4 fit. 
+      <div class="page-num">Page 2 / 2</div>
+    </footer>
+  </main>
+</body>
+</html>

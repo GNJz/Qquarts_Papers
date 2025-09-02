@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SNN IG — 요약 & 다음 단계 (p.2)</title>
+  <style>
+    :root{
+      --fg:#1f2328; --sub:#5b5f66; --muted:#8a8f98;
+      --bg:#f6f7f9; --card:#ffffff; --line:#e6e9ef; --chip:#eef2f7;
+      --accent:#0b5fff;
+    }
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",
+                 "Pretendard","Noto Sans KR",Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      line-height:1.65; font-size:16px;
+    }
+    .page{max-width:760px;margin:80px auto;background:var(--card);
+      border:1px solid var(--line);border-radius:14px;box-shadow:0 6px 20px rgba(19,31,55,.06);
+      padding:44px 48px;}
+    h1{margin:0 0 8px 0;font-size:26px;font-weight:700;letter-spacing:-.2px;}
+    .meta{color:var(--muted);font-size:14px}
+    .meta code{background:var(--chip);padding:.1rem .35rem;border-radius:6px}
+    h2{font-size:20px;margin:28px 0 10px 0;border-bottom:1px solid var(--line);padding-bottom:6px}
+    p{margin:8px 0}
+    ul{margin:6px 0 10px 18px}
+    table{width:100%;border-collapse:collapse;margin:8px 0}
+    th,td{border:1px solid var(--line);padding:10px 12px;vertical-align:top}
+    th{background:#f2f4f8;text-align:left;font-weight:700}
+    tbody tr:nth-child(odd){background:#fafbfe}
+    code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    pre{background:#f1f3f7;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13.5px}
+    .note{color:var(--sub);font-size:12.5px}
+    @page{size:A4;margin:16mm}
+    @media print{body{background:#fff}.page{box-shadow:none;border:0;border-radius:0;margin:0;padding:0}}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <h1>누화 임계값 제어를 통한 LIF 기반 SNN — 요약 & 다음 단계 (p.2)</h1>
+      <div class="meta">
+        작성자: GNJz · <a href="mailto:jazzin@qig.ai">jazzin@qig.ai</a> · 2025-09-02<br/>
+        코드: <code>QIG/code/lif_network.py</code> (commit fc6ceee)
+      </div>
+    </header>
+
+    <section>
+      <h2>핵심 요약 (5줄)</h2>
+      <ul>
+        <li>동일 입력(0.1–0.7 s)에서 임계값 게이팅(α=0.7)만으로 <b>무발화 → 집단 발화</b> 전이 확인.</li>
+        <li>총 스파이크: baseline 0 ↔ IG on 86 (N=5, T=1 s, dt=1 ms).</li>
+        <li>전이는 (i) 임계 접근 + (ii) 재귀 흥분성 양의 피드백 결합의 결과로 해석.</li>
+        <li>간단한 게이트만으로 네트워크 민감도/동조 크게 변화 → 태스크 성능 잠재력.</li>
+        <li>현재는 최소 재현 예시; 통계·스윕·태스크 검증 필요.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>숫자 요약</h2>
+      <table>
+        <thead><tr><th>조건</th><th>총 스파이크 (1 s)</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td>Baseline (α=1.0)</td><td>0</td><td>입력 존재하나 임계 미도달</td></tr>
+          <tr><td>IG on (α=0.7)</td><td>86</td><td>광범위 발화 유도</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>재현 요약 (로컬)</h2>
+      <pre><code>cd ~/Desktop/Qquarts_Lab/QIG/code
+python3 lif_network.py    # figs/raster_baseline.png, figs/raster_ig.png 생성</code></pre>
+    </section>
+
+    <section>
+      <h2>리스크 & 체크리스트</h2>
+      <ul>
+        <li>단일 시드/N=5 → 파라미터·랜덤성 민감 (재현 실험 다중 시드 필요).</li>
+        <li>baseline=0이라 비율 효과 정의 곤란 → <i>반응 여부/지연/발화 뉴런 비율</i> 같이 보고.</li>
+        <li>입력·가중치 단순화 → 태스크 적합도는 별도 검증 필요.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>다음 단계 (실험 계획)</h2>
+      <ul>
+        <li><b>통계 재현</b>: 시드 30개, 95% CI.</li>
+        <li><b>스윕</b>: α ∈ {0.5…1.0}, N ∈ {5,20,50}, 입력 강도/길이.</li>
+        <li><b>지표</b>: 총 스파이크, 반응 지연, 발화 뉴런 비율, 동조도/Fano.</li>
+        <li><b>Ablation</b>: 재귀 차단(W=0), 억제 링크 제거/증가.</li>
+        <li><b>태스크</b>: 간단한 이진 감지에서 IG on/off 성능 비교.</li>
+      </ul>
+    </section>
+
+    <footer class="note" style="margin-top:18px">
+      인쇄 팁: 브라우저에서 “파일 → 인쇄 → PDF로 저장”, 배율 95–98%로 맞추면 A4 두 장에 안정적으로 맞습니다.
+    </footer>
+  </main>
+</body>
+</html>

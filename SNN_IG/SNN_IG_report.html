@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SNN IG — Page 1/2</title>
+<style>
+  :root{
+    --fg:#1f2328; --sub:#5b5f66; --muted:#8a8f98;
+    --bg:#f6f7f9; --card:#fff; --line:#e6e9ef; --chip:#eef2f7; --accent:#0b5fff;
+    --sans:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",
+           "Noto Sans KR",Pretendard,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg)}
+  body{font-family:var(--sans); line-height:1.6; font-size:15px}
+  .page{max-width:680px;margin:64px auto;background:var(--card);
+        border:1px solid var(--line); border-radius:14px;
+        box-shadow:0 6px 20px rgba(19,31,55,.06); padding:32px 40px}
+  header h1{margin:0 0 8px;font-weight:700;font-size:24px;letter-spacing:-.2px}
+  header .meta{color:var(--muted);font-size:13px}
+  header .meta a{color:var(--accent);text-decoration:none}
+  header .meta code{background:var(--chip);padding:.06rem .35rem;border-radius:6px}
+
+  h2{font-size:18px;margin:18px 0 8px;border-bottom:1px solid var(--line);padding-bottom:6px}
+  p{margin:6px 0}
+
+  table{width:100%;border-collapse:collapse;margin:8px 0 4px}
+  th,td{border:1px solid var(--line);padding:8px 10px;vertical-align:top}
+  th{background:#f3f5f9;text-align:left;font-weight:700}
+  tbody tr:nth-child(odd){background:#fafbfe}
+
+  .fig2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+  .fig2 figure{margin:0}
+  .fig2 img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:10px;max-height:150px;object-fit:contain}
+  .cap{color:var(--sub);font-size:12px;margin-top:4px}
+
+  code,pre{font-family:var(--mono)}
+  .foot{color:var(--muted);font-size:12px;margin-top:10px;text-align:right}
+
+  @page{size:A4;margin:17mm}
+  @media print{
+    body{background:#fff}
+    .page{box-shadow:none;border:0;border-radius:0;margin:0;padding:0;max-width:unset}
+    body{font-size:12.6px;line-height:1.45}
+    header h1{font-size:20px}
+    h2{font-size:16px;margin:12px 0 6px}
+    .fig2 img{max-height:115px}
+    a[href]:after{content:""}
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <header>
+    <h1>누화 임계값 제어를 통한 LIF 기반 SNN의 반응성 변화 (1-page of 2)</h1>
+    <div class="meta">
+      작성자: <strong>GNJz</strong> · <a href="mailto:jazzin@qig.ai">jazzin@qig.ai</a><br/>
+      2025-09-02 · 코드: <code>QIG/code/lif_network.py</code> (commit fc6ceee)
+    </div>
+  </header>
+
+  <section>
+    <h2>초록</h2>
+    <p>
+      5뉴런 LIF 네트워크에서 임계값 게이팅(IG: inhibitory gating, 임계값 완화)을 적용했을 때
+      집단 반응성이 얼마나 바뀌는지 최소 재현 실험으로 확인했다. 동일 입력(0.1–0.7 s 펄스)에서
+      <strong>베이스라인(α=1.0)의 총 스파이크는 0</strong>, <strong>IG on(α=0.7)은 86</strong>으로 관측되었고,
+      단순 임계값 조정만으로 <strong>무발화 → 집단 발화</strong>의 질적 전이가 나타났다.
+    </p>
+  </section>
+
+  <section>
+    <h2>방법(요약)</h2>
+    <table>
+      <thead><tr><th>항목</th><th>설정</th></tr></thead>
+      <tbody>
+        <tr><td>모델</td><td>LIF (Leaky Integrate-and-Fire) with reset</td></tr>
+        <tr><td>시뮬레이션</td><td>T=1 s, dt=1 ms (1000 steps)</td></tr>
+        <tr><td>파라미터</td><td>τ=20 ms, V<sub>rest</sub>=0, R=40, θ<sub>base</sub>=1.0, V<sub>reset</sub>=0.2</td></tr>
+        <tr><td>뉴런 수</td><td>N=5</td></tr>
+        <tr><td>입력</td><td>모든 뉴런에 0.1–0.7 s 펄스(뉴런별 잡음 σ=0.05)</td></tr>
+        <tr><td>재귀 연결</td><td>U(0, 0.25) (대각 0), 임의 3개 억제 연결 –0.15</td></tr>
+        <tr><td>게이팅</td><td>θ = α·θ<sub>base</sub>; baseline α=1.0, IG on α=0.7</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>결과</h2>
+    <table>
+      <thead><tr><th>조건</th><th>총 스파이크 수 (1 s)</th></tr></thead>
+      <tbody>
+        <tr><td>Baseline (α=1.0)</td><td>0</td></tr>
+        <tr><td>IG on (α=0.7)</td><td>86</td></tr>
+      </tbody>
+    </table>
+
+    <div class="fig2">
+      <figure>
+        <img src="./figs/raster_baseline.png" alt="Raster — Baseline (α=1.0)">
+        <div class="cap">Fig.1 Raster — Baseline (α=1.0): 입력이 있어도 임계에 도달하지 못함.</div>
+      </figure>
+      <figure>
+        <img src="./figs/raster_ig.png" alt="Raster — IG on (α=0.7)">
+        <div class="cap">Fig.2 Raster — IG on (α=0.7): 동일 입력에서 광범위한 발화 유도.</div>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>해석</h2>
+    <p>
+      동일 외부 펄스 하에서 임계값 <strong>30% 완화</strong>만으로 네트워크는 “무발화 → 집단 발화”로 전이했다.
+      이는 (i) 개별 뉴런의 임계 접근과 (ii) 재귀 흥분성의 양의 피드백 결합이 만든
+      <em>집단 임계 현상</em>으로 해석된다.
+    </p>
+  </section>
+
+  <div class="foot">Page 1 / 2</div>
+</main>
+</body>
+</html>

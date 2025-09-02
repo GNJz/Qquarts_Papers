@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LIF‑based SNN with Threshold Gating — Summary & Next Steps (Page 2 of 2)</title>
+  <style>
+    :root{
+      --fg:#1f2328; --sub:#5b5f66; --muted:#8a8f98;
+      --bg:#f6f7f9; --card:#ffffff; --line:#e6e9ef; --chip:#eef2f7;
+      --accent:#0b5fff;
+    }
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,Inter,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      line-height:1.65; font-size:16px;
+    }
+    .page{max-width:760px;margin:80px auto;background:var(--card);
+      border:1px solid var(--line);border-radius:14px;box-shadow:0 6px 20px rgba(19,31,55,.06);
+      padding:44px 48px;}
+    h1{margin:0 0 8px 0;font-size:26px;font-weight:700;letter-spacing:-.2px;}
+    .meta{color:var(--muted);font-size:14px}
+    .meta code{background:var(--chip);padding:.1rem .35rem;border-radius:6px}
+    h2{font-size:20px;margin:28px 0 10px 0;border-bottom:1px solid var(--line);padding-bottom:6px}
+    p{margin:8px 0}
+    ul{margin:6px 0 10px 18px}
+    table{width:100%;border-collapse:collapse;margin:8px 0}
+    th,td{border:1px solid var(--line);padding:10px 12px;vertical-align:top}
+    th{background:#f2f4f8;text-align:left;font-weight:700}
+    tbody tr:nth-child(odd){background:#fafbfe}
+    code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    pre{background:#f1f3f7;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13.5px}
+    .note{color:var(--sub);font-size:12.5px}
+    @page{size:A4;margin:16mm}
+    @media print{body{background:#fff}.page{box-shadow:none;border:0;border-radius:0;margin:0;padding:0}}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <h1>LIF‑based SNN with Threshold Gating — Summary & Next Steps (Page 2 of 2)</h1>
+      <div class="meta">
+        Author: GNJz · <a href="mailto:jazzin@qig.ai">jazzin@qig.ai</a> · 2025-09-02<br/>
+        Code: <code>QIG/code/lif_network.py</code> (commit fc6ceee)
+      </div>
+    </header>
+
+    <section>
+      <h2>Key findings (5 lines)</h2>
+      <ul>
+        <li>With identical input (0.1–0.7 s), threshold gating (α=0.7) alone triggers a <b>no‑spike → network‑spike</b> transition.</li>
+        <li>Total spikes: baseline 0 vs. IG on 86 (N=5, T=1 s, dt=1 ms).</li>
+        <li>Transition plausibly arises from (i) near‑threshold membrane dynamics + (ii) positive feedback in recurrence.</li>
+        <li>A simple gating control markedly shifts sensitivity/synchrony, suggesting task‑level benefits.</li>
+        <li>This is a minimal reproducible example; robust statistics and tasks are required for claims.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Numerical summary</h2>
+      <table>
+        <thead><tr><th>Condition</th><th>Total spikes (1 s)</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Baseline (α=1.0)</td><td>0</td><td>Input present; threshold not reached</td></tr>
+          <tr><td>IG on (α=0.7)</td><td>86</td><td>Widespread spiking</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Reproducibility (local)</h2>
+      <pre><code>cd ~/Desktop/Qquarts_Lab/QIG/code
+python3 lif_network.py    # produces figs/raster_baseline.png and figs/raster_ig.png</code></pre>
+    </section>
+
+    <section>
+      <h2>Risks & checklist</h2>
+      <ul>
+        <li>Single seed, N=5 → sensitivity to parameters/randomness (repeat with multiple seeds).</li>
+        <li>Baseline=0 complicates ratio‑based effect sizes → track response/no‑response, latency, fraction of spiking units.</li>
+        <li>Simplified input/connectivity → task relevance requires an explicit downstream task.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Planned experiments</h2>
+      <ul>
+        <li><b>Statistical replication</b>: 30 seeds, report mean ± 95% CI.</li>
+        <li><b>Sweeps</b>: α ∈ {0.5…1.0}, N ∈ {5,20,50}, input strength/length.</li>
+        <li><b>Metrics</b>: total spikes, response latency, spiking fraction, synchrony/Fano.</li>
+        <li><b>Ablations</b>: remove recurrence (W=0), remove/boost inhibition.</li>
+        <li><b>Task suitability</b>: simple binary detection; compare IG on/off.</li>
+      </ul>
+    </section>
+
+    <footer class="note" style="margin-top:18px">
+      Print tip: in the browser choose <em>File → Print → Save as PDF</em>; a scale of 95–98% fits A4 on two pages.
+    </footer>
+  </main>
+</body>
+</html>

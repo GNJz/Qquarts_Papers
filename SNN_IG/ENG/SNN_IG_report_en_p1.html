@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Effect of Threshold Gating on Responsiveness in an LIF‑Based SNN (Page 1 of 2)</title>
+<style>
+  :root{
+    --fg:#1f2328; --sub:#5b5f66; --muted:#8a8f98;
+    --bg:#f6f7f9; --card:#fff; --line:#e6e9ef; --chip:#eef2f7; --accent:#0b5fff;
+    --sans:-apple-system,BlinkMacSystemFont,Inter,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg)}
+  body{font-family:var(--sans); line-height:1.6; font-size:15px}
+  .page{max-width:680px;margin:64px auto;background:var(--card);
+        border:1px solid var(--line); border-radius:14px;
+        box-shadow:0 6px 20px rgba(19,31,55,.06); padding:32px 40px}
+  header h1{margin:0 0 8px;font-weight:700;font-size:24px;letter-spacing:-.2px}
+  header .meta{color:var(--muted);font-size:13px}
+  header .meta a{color:var(--accent);text-decoration:none}
+  header .meta code{background:var(--chip);padding:.06rem .35rem;border-radius:6px}
+  h2{font-size:18px;margin:18px 0 8px;border-bottom:1px solid var(--line);padding-bottom:6px}
+  p{margin:6px 0}
+  table{width:100%;border-collapse:collapse;margin:8px 0 4px}
+  th,td{border:1px solid var(--line);padding:8px 10px;vertical-align:top}
+  th{background:#f3f5f9;text-align:left;font-weight:700}
+  tbody tr:nth-child(odd){background:#fafbfe}
+  .fig2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+  .fig2 figure{margin:0}
+  .fig2 img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:10px;max-height:150px;object-fit:contain}
+  .cap{color:var(--sub);font-size:12px;margin-top:4px}
+  code,pre{font-family:var(--mono)}
+  .foot{color:var(--muted);font-size:12px;margin-top:10px;text-align:right}
+  @page{size:A4;margin:17mm}
+  @media print{
+    body{background:#fff}
+    .page{box-shadow:none;border:0;border-radius:0;margin:0;padding:0;max-width:unset}
+    body{font-size:12.6px;line-height:1.45}
+    header h1{font-size:20px}
+    h2{font-size:16px;margin:12px 0 6px}
+    .fig2 img{max-height:115px}
+    a[href]:after{content:""}
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <header>
+    <h1>Effect of Threshold Gating on Responsiveness in an LIF‑Based SNN (Page 1 of 2)</h1>
+    <div class="meta">
+      Author: <strong>GNJz</strong> · <a href="mailto:jazzin@qig.ai">jazzin@qig.ai</a><br/>
+      2025-09-02 · Code: <code>QIG/code/lif_network.py</code> (commit fc6ceee)
+    </div>
+  </header>
+
+  <section>
+    <h2>Abstract</h2>
+    <p>
+      We examined whether a simple <em>threshold‑gating</em> mechanism—modeled as a proportional
+      reduction of the spike threshold—amplifies collective responsiveness in a small spiking neural
+      network (SNN). In a 5‑neuron LIF network receiving a pulse input from 0.1–0.7 s, we compared
+      baseline (α=1.0) against IG on (α=0.7; 30% lower threshold). The total spike count was
+      <strong>0 at baseline</strong> versus <strong>86 with IG on</strong>, indicating a
+      qualitative transition from <em>no response</em> to <em>network‑wide spiking</em> under identical input.
+      This constitutes a minimal reproducible example; broader validation is left for future work.
+    </p>
+  </section>
+
+  <section>
+    <h2>Methods (Summary)</h2>
+    <table>
+      <thead><tr><th>Item</th><th>Setting</th></tr></thead>
+      <tbody>
+        <tr><td>Model</td><td>LIF (Leaky Integrate‑and‑Fire) with reset</td></tr>
+        <tr><td>Simulation</td><td>T=1 s, dt=1 ms (1000 steps)</td></tr>
+        <tr><td>Parameters</td><td>τ=20 ms, V<sub>rest</sub>=0, R=40, θ<sub>base</sub>=1.0, V<sub>reset</sub>=0.2</td></tr>
+        <tr><td>Neurons</td><td>N=5</td></tr>
+        <tr><td>Input</td><td>Pulse to all neurons (0.1–0.7 s) with per‑neuron noise σ=0.05</td></tr>
+        <tr><td>Recurrent weights</td><td>U(0,0.25) off‑diagonal, 3 random inhibitory links −0.15</td></tr>
+        <tr><td>Gating</td><td>θ = α·θ<sub>base</sub>; baseline α=1.0, IG on α=0.7</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Results</h2>
+    <table>
+      <thead><tr><th>Condition</th><th>Total spikes (1 s)</th></tr></thead>
+      <tbody>
+        <tr><td>Baseline (α=1.0)</td><td>0</td></tr>
+        <tr><td>IG on (α=0.7)</td><td>86</td></tr>
+      </tbody>
+    </table>
+
+    <div class="fig2">
+      <figure>
+        <img src="./figs/raster_baseline.png" alt="Raster — Baseline (α=1.0)">
+        <div class="cap">Fig. 1 — Baseline (α=1.0): no spiking despite input.</div>
+      </figure>
+      <figure>
+        <img src="./figs/raster_ig.png" alt="Raster — IG on (α=0.7)">
+        <div class="cap">Fig. 2 — IG on (α=0.7): widespread spiking under identical input.</div>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>Interpretation</h2>
+    <p>
+      A <strong>30% relaxation</strong> of the threshold is sufficient to tip the network from
+      a non‑spiking to a collectively spiking regime. We interpret this transition as the combined effect
+      of (i) individual neurons approaching threshold and (ii) positive feedback due to recurrent
+      excitation, i.e., a <em>collective critical phenomenon</em> in this minimal network.
+    </p>
+  </section>
+
+  <div class="foot">Page 1 / 2</div>
+</main>
+</body>
+</html>
